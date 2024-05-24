@@ -36,5 +36,10 @@
                 "path": "./syntaxes/cns.ikemen.tmLanguage.json"
             }
         ]
+    },
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/ikemen-engine/zss_vsc"
     }
 }

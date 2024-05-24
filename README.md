@@ -3,7 +3,9 @@
 Very basic (but thorough) syntax highlighting for various IKEMEN GO code files, for Visual Studio Code.
 
 ## Installation
-Copy the whole folder into the `<user home>/.vscode/extensions` folder and restart VS Code.
+[Install vsce by following these instructions,](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#vsce) then, run `vsce package` in the root of the extension's folder.
+
+To install the resulting .vsix file, either run `code --install-extension ikemen-highlighting-0.5.0.vsix`, or open up VS Code, go to the Extensions view, click **Views and More Actions...**, and select **Install from VSIX...**.
 
 ## Known Issues
 - This has not yet undergone rigorous testing, so there might be some things mishighlighted, or things that should be highlighted that aren't.
