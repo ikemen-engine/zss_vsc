@@ -1,0 +1,45 @@
+{
+    "name": "ikemen-highlighting",
+    "publisher": "Jmorphman",
+    "icon": "icon.png",
+    "displayName": "IKEMEN highlighting",
+    "description": "Provides syntax highlighting for IKEMEN code files (.zss, .cns, .air, etc.)",
+    "version": "0.5.0",
+    "license": "MIT",
+    "engines": { "vscode": "^1.88.0" },
+    "categories": [ "Programming Languages" ],
+    "contributes":
+    {
+        "languages": 
+        [
+            {
+                "id": "zss.ikemen",
+                "extensions": [".zss"],
+                "configuration": "./language-configuration.json"
+            },
+            {
+                "id": "cns.ikemen",
+                "extensions": [".cns", ".st", ".vns", ".def"],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": 
+        [
+            {
+                "language": "zss.ikemen",
+                "scopeName": "source.zss.ikemen",
+                "path": "./syntaxes/zss.ikemen.tmLanguage.json"
+            },
+            {
+                "language": "cns.ikemen",
+                "scopeName": "source.cns.ikemen",
+                "path": "./syntaxes/cns.ikemen.tmLanguage.json"
+            }
+        ]
+    },
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/ikemen-engine/zss_vsc"
+    }
+}

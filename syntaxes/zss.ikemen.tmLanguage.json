@@ -1,0 +1,316 @@
+{
+    "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+    "name": "IKEMEN",
+    "patterns": 
+    [
+        { "include": "#comments" },
+        { "include": "#numeric" },
+        { "include": "#strings" },
+        { "include": "#function-header" },
+        { "include": "#statedef-header" },
+        { "include": "#function-name-after-call" },
+        { "include": "#keywords" },
+        { "include": "#local-variables" },
+        { "include": "#sctrls" },
+        { "include": "#redirects" },
+        { "include": "#trigger-arguments" },
+        { "include": "#triggers"},
+        { "include": "#trigger-postfix"}
+    ],
+    "repository": 
+    {
+        "comments": 
+        {
+            "patterns": 
+            [
+                {
+                    "name": "comment.line.number-sign.zss",
+                    "match": "((?:#).*\n|\r)"
+                }
+            ]
+        },
+        "numeric": 
+        {
+            "patterns": 
+            [
+                {
+                    "name": "constant.numeric.decimal.zss",
+                    "match": "\\d\\.?"
+                }
+            ]
+        },
+        "strings":
+        {
+            "name": "string.quoted.double.zss",
+            "begin": "\"",
+            "end": "\"",
+            "patterns":
+            [
+                {
+                    "name": "constant.character.escape.zss",
+                    "match": "\\\\."
+                }
+            ]
+        },
+        "function-header":
+        {
+            "begin": "(?i)\\[\\s*(\\b(function)\\b)",
+            "beginCaptures": { "1": { "name": "keyword.control.zss" } },
+            "end": "\\]",
+            "patterns":
+            [
+                {
+                    "name": "variable.parameter.zss",
+                    "match": "\\w*\\s*(?=\\])"
+                },
+                {
+                    "name": "entity.name.function.zss",
+                    "match": "\\w"
+                },
+                {
+                    "begin": "\\(",
+                    "end": "\\)",
+                    "patterns": 
+                    [
+                        {
+                            "name": "variable.parameter.zss",
+                            "match": "\\w"
+                        }
+                    ]
+                }
+            ]
+        },
+        "statedef-header": 
+        {
+            "begin": "(?i)\\[\\s*(\\b(statedef)\\b)",
+            "beginCaptures": { "1": { "name": "keyword.control.zss" } },
+            "end": "\\]",
+            "patterns": 
+            [
+                { "include": "#comments" },
+                { "include": "#numeric" },
+                { "include": "#strings" },
+                {
+                    "name": "variable.parameter.zss",
+                    "match": "(?i)\\b(velset|type|sprpriority|poweradd|physics|movetype|movehitpersist|juggle|hitdefpersist|hitcountpersist|facep2|ctrl|anim)\\b(?=(\\s*):)"
+                },
+                { "include": "#redirects" },
+                { "include": "#trigger-arguments" },
+                { "include": "#triggers"},
+                { "include": "#trigger-postfix"},
+                {
+                    "name": "storage.modifier.zss",
+                    "match": "\\w"
+                }
+            ]
+        },
+        "function-name-after-call":
+        {
+            "patterns": 
+            [
+                {
+                    "name": "entity.name.function.zss",
+                    "match": "(?i)(?<=\\b(call)\\b\\s+)(\\w*)"
+                }
+            ]
+        },
+        "keywords": 
+        {
+            "patterns": 
+            [
+                {
+                    "begin": "(?i)\\b(if|else)\\b",
+                    "beginCaptures": { "1": { "name": "keyword.control.conditional.zss" } },
+                    "end": "\\{",
+                    "patterns": 
+                    [
+                        { "include": "#comments" },
+                        { "include": "#numeric" },
+                        { "include": "#strings" },
+                        {
+                            "name": "keyword.control.conditional.zss",
+                            "match": "(?i)\\b(if|else)\\b"
+                        },
+                        { "include": "#local-variables" },
+                        { "include": "#redirects" },
+                        { "include": "#trigger-arguments" },
+                        { "include": "#triggers"},
+                        { "include": "#trigger-postfix"}
+                    ]
+                },
+                {
+                    "begin": "(?i)\\b(while|for)\\b",
+                    "beginCaptures": { "1": { "name": "keyword.control.loop.zss" } },
+                    "end": "\\{",
+                    "patterns": 
+                    [
+                        { "include": "#comments" },
+                        { "include": "#numeric" },
+                        { "include": "#strings" },
+                        { "include": "#local-variables" },
+                        { "include": "#redirects" },
+                        { "include": "#trigger-arguments" },
+                        { "include": "#triggers"},
+                        { "include": "#trigger-postfix"}
+                    ]
+                },
+                {
+                    "name": "keyword.control.loop.zss",
+                    "match": "(?i)\\b(break|continue)\\b(?=\\s*;)"
+                },
+                {
+                    "name": "keyword.control.flow.zss",
+                    "match": "(?i)\\b(call)\\b"
+                },
+                {
+                    "name": "keyword.control.switch.zss",
+                    "match": "(?i)\\b(switch|case)\\b|\\bdefault\\b(?=(\\s*):)"
+                },
+                {
+                    "name": "keyword.other.zss",
+                    "match": "(?i)(\\b(ignorehitpause|persistent|let)\\b)"
+                }
+            ]
+        },
+        "local-variables": 
+        {
+            "patterns": 
+            [
+                {
+                    "name": "variable.parameter.zss",
+                    "match": "(?i)(?<=let\\s+)(\\w*)\\b"
+                },
+                {
+                    "name": "variable.parameter.zss",
+                    "match": "\\$\\w*"
+                },
+                {
+                    "name": "variable.parameter.zss",
+                    "match": "(?i)(?<=for\\s+)(\\w*)\\b"
+                }
+            ]
+        },
+        "sctrls": 
+        {
+            "begin": "(?i)(\\b(zoom|width|victoryquote|velset|velmul|veladd|varset|varrangeset|varrandom|varadd|turn|trans|text|teammapset|teammapadd|targetvelset|targetveladd|targetstate|targetscoreadd|targetredlifeadd|targetpoweradd|targetlifeadd|targetguardpointsadd|targetfacing|targetdrop|targetdizzypointsadd|targetbind|tagout|tagin|superpause|stopsnd|statetypeset|sndpan|selfstate|screenbound|scoreadd|savefile|roundtimeset|roundtimeadd|rootvarset|rootvaradd|rootmapset|rootmapadd|reversaldef|removeexplod|remapsprite|remappal|redlifeset|redlifeadd|projectile|printtoconsole|powerset|poweradd|posset|posfreeze|posadd|playsnd|playerpush|playbgm|pause|parentvarset|parentvaradd|parentmapset|parentmapadd|palfx|null|nothitby|movehitreset|modifystagevar|modifysnd|modifyexplod|modifychar|modifybgm|modifybgctrl|matchrestart|mapset|mapadd|makedust|loadfile|lifeset|lifebaraction|lifeadd|hitvelset|hitscaleset|hitoverride|hitfallvel|hitfallset|hitfalldamage|hitdef|hitby|hitadd|height|guardpointsset|guardpointsadd|guardbreakset|gravity|gethitvarset|gamemakeanim|forcefeedback|fallenvshake|explodbindtime|explod|envshake|envcolor|dizzyset|dizzypointsset|dizzypointsadd|displaytoclipboard|dialogue|destroyself|defencemulset|ctrlset|clearclipboard|changestate|changeanim2|changeanim|camera|bindtotarget|bindtoroot|bindtoparent|bgpalfx|attackmulset|attackdist|assertspecial|assertinput|assertcommand|appendtoclipboard|angleset|anglemul|angledraw|angleadd|allpalfx|afterimagetime|afterimage)\\b|\\b(sprpriority)\\b(?=\\s*{)|(offset)(?=\\s+[^xy]|{|$)|(\\b(helper)\\b(?!\\s*[\\(,])))",
+            "beginCaptures": { "1": { "name": "entity.name.type.class.zss" } },
+            "end": "\\}",
+            "patterns": 
+            [
+                {
+                    "name": "variable.parameter.zss",
+                    "match": "(?i)\\b(z|yvel|yangle|yaccel|y|xvel|xangle|x|window|waveform|volumescale|volume|view|vfacing|velocity|velmul|vel|var|value2|value|v|unhittable|under|trans|top|timemul|timegap|time|text[0-9]*|teamside|sysvar|sysfvar|supermovetime|supermove|statetype|stateno|startposition|standby|stageinfo.zoffsetlink|stageinfo.zoffset|stageinfo.yscale|stageinfo.xscale|stagedef|stagebound|sprpriority|spr|sparkxy|sparkno|sparkangle|spacing|space|source|sound|snd|snap|slot|slidetime|size.yscale|size.xscale|size.shadowoffset|size.proj.doscale|size.mid.pos|size.height.down|size.height.crouch|size.height.air|size.height|size.head.pos|size.ground.front|size.ground.back|size.air.front|size.air.back|size|sinmul|sinhue|sincolor|sinadd|shadow.yscale|shadow.xshear|shadow.intensity|shadow.fade.range|shadow.color|shadow|self|score|scaling.topscale|scale|savedata|reversal.attr|reset|rescaleclsn|remvelocity|removetime|removeongethit|removeonchangestate|removeexplods|remappal|reload|reflection.intensity|redlife|redirectid|recursive|recovertime|readplayerid|range|random|projstagebound|projsprpriority|projshadow|projscale|projrescaleclsn|projremovetime|projremove|projremanim|projpriority|projmisstime|projid|projhits|projhitanim|projheightbound|projedgebound|projection|projcancelanim|projanim|projangle|priority|preset|preserve|powermax|poweradd|postype|position|pos2|pos|playerno|playerinfo.rightbound|playerinfo.leftbound|player|platformwidth|platformheight|platformfence|platformangle|platform|physics|phase|pausetime|pausemovetime|pausebg|path|partnerstateno|partnerctrl|partner|params|pan|palpostbright|palmul|palinvertblend|palinvertall|palhue|palfx.time|palfx.sinmul|palfx.sinhue|palfx.sincolor|palfx.sinadd|palfx.mul|palfx.invertblend|palfx.invertall|palfx.hue|palfx.color|palfx.add|palcontrast|palcolor|palbright|paladd|p8def|p7def|p6def|p5def|p4def|p3def|p2stateno|p2sprpriority|p2getp1state|p2facing|p2defmul|p2def|p1stateno|p1sprpriority|p1getp2facing|p1facing|p1def|ownpal|ontop|onhit|offset|numhits|nochainid|name|multype|mul|movetype|movetime|movecamera|mindist|min|maxdist|max|map|lowpriority|loopstart|loopend|loop|localcoord|lifemax|lifebarname|length|leader|layerno|last|lag|kovelocity|kill|keyctrl|keepstate|keepone|invertblend|invertall|interpolation.time|interpolation.scale|interpolation.palfx.mul|interpolation.palfx.hue|interpolation.palfx.color|interpolation.palfx.add|interpolation.offset|interpolation.focallength|interpolation.animelem|interpolation.angle|interpolation.alpha|interpolation|inheritjuggle|inheritchannels|immortal|ignorehitpause|id|hue|hittime|hitsound.channel|hitsound|hitshaketime|hitonce|hitflag|hidebars|helpertype|guardsound.channel|guardsound|guardpointsmax|guardpoints|guardflag|guarded|guard.velocity|guard.sparkno|guard.sparkangle|guard.slidetime|guard.pausetime|guard.kill|guard.hittime|guard.dist.back|guard.dist|guard.ctrltime|guard.cornerpush.veloff|groundtype|ground.velocity|ground.type|ground.slidetime|ground.hittime|ground.cornerpush.veloff|givepower|getpower|fvar|fvalue|fv|freqmul|freq|framegap|forcestand|forcenofall|forcecrouch|forceair|force|font|followid|focallength|flag3|flag2|flag|first|fallcount|fall.yvelocity|fall.yvel|fall.xvelocity|fall.xvel|fall.recovertime|fall.recover|fall.kill|fall.envshake.time|fall.envshake.phase|fall.envshake.mul|fall.envshake.freq|fall.envshake.ampl|fall.damage|fall.animtype|fall|facing|extendsmap|excludeid|envshake.time|envshake.phase|envshake.mul|envshake.freq|envshake.ampl|endcmdbuftime|elem|edge|down.velocity|down.hittime|down.cornerpush.veloff|down.bounce|dizzypointsmax|dizzypoints|dizzy|displayname|dest|darken|damage|ctrltime|ctrl|continue|color|channel|chainid|camerabound|camera.zoomout|camera.zoomindelay|camera.zoomin|camera.ytension.enable|camera.verticalfollow|camera.tensionvel|camera.tensionlow|camera.tensionhigh|camera.tension|camera.startzoom|camera.floortension|camera.cutlow|camera.cuthigh|camera.boundright|camera.boundlow|camera.boundleft|camera.boundhigh|camera.autocenter|buffertime|bound.screenright|bound.screenleft|bindtime|bindid|bgm|bank|back|attr|animtype|animfreeze|animelem|anim|angle|ampl|alpha|align|airtype|airguard.velocity|airguard.ctrltime|airguard.cornerpush.veloff|air.velocity|air.type|air.juggle|air.hittime|air.fall|air.cornerpush.veloff|air.animtype|afterimage.trans|afterimage.timegap|afterimage.time|afterimage.palpostbright|afterimage.palmul|afterimage.palinvertblend|afterimage.palinvertall|afterimage.palhue|afterimage.palcontrast|afterimage.palcolor|afterimage.palbright|afterimage.paladd|afterimage.length|afterimage.framegap|afterimage.alpha|affectteam|affects|addType|add|activetime|accel|abspan|absolute)\\b(?=(\\s*):)"
+                },
+                { "include": "#comments" },
+                { "include": "#numeric" },
+                { "include": "#strings" },
+                {
+                    "name": "variable.parameter.zss",
+                    "match": "\\$\\w*"
+                },
+                {
+                    "name": "variable.language.arguments.zss",
+                    "match": "(?i)(?<=postype\\s*:\\s*)(p1|p2|front|back|left|right|none)"
+                },
+                {
+                    "name": "variable.language.arguments.zss",
+                    "match": "(?i)(?<=space\\s*:\\s*)(screen|stage)"
+                },
+                {
+                    "name": "variable.language.arguments.zss",
+                    "match": "(?i)(?<=projection\\s*:\\s*)(orthographic|perspective|perspective2)"
+                },
+                {
+                    "name": "variable.language.arguments.zss",
+                    "match": "(?i)(?<=savedata\\s*:\\s*)(map|var|fvar)"
+                },
+                {
+                    "name": "variable.language.arguments.zss",
+                    "match": "(?i)(?<=trans\\s*:\\s*)(default|none|add|addalpha|add1|sub)"
+                },
+                { "include": "#redirects" },
+                { "include": "#trigger-arguments" },
+                { "include": "#triggers"},
+                { "include": "#trigger-postfix"},
+                {
+                    "name": "storage.modifier.zss",
+                    "match": "\\w"
+                }        
+            ]
+        },
+        "redirects":
+        {
+            "patterns":
+            [
+                {
+                    "name": "string.regexp.zss",
+                    "match": "(?i)\\b(target|stateowner|root|playerindex|playerid|player|partner|parent|p2|helperindex|helper|enemynear|enemy)\\b"
+                }
+            ]
+        },
+        "trigger-arguments": 
+        {
+            "patterns": 
+            [
+                {
+                    "name": "variable.other.constant.zss",
+                    "match": "(?i)(?<=(const|stageconst)\\s*\\()\\w*(\\.\\w*)*(?=\\))"
+                },
+                {
+                    "name": "variable.parameter.zss",
+                    "match": "(?i)(?<=map\\s*\\()\\w*(\\.\\w*)*(?=\\))"
+                },
+                {
+                    "name": "storage.type.zss",
+                    "match": "(?i)(?<=(stagevar|palfxvar|movehitvar|isasserted|gethitvar|fightscreenvar|envshakevar|animframe)\\s*\\()\\w*(\\.\\w*)*(?=\\))"
+                }
+            ]
+        },
+        "triggers": 
+        {
+            "patterns": 
+            [
+                {
+                    "name": "support.function.zss",
+                    "match": "(?i)\\b(wintime|winspecial|winperfect|winko|winhyper|win|vel|var|uniqhitcount|topedge|timetotal|timeremaining|timemod|timeleft|timeelapsed|time|tickspersecond|teamsize|teamside|teammode|teamleader|tan|sysvar|sysfvar|statetype|stateno|standby|stagevar|stagetime|stagefrontedgedist|stagefrontedge|stageconst|stagebackedgedist|stagebackedge|sprpriority|sin|sign|selfstatenoexist|selfcommand|selfanimexist|screenwidth|screenpos|screenheight|scoretotal|score|scale|runorder|roundtype|roundstate|roundsexisted|roundno|round|rootdist|rightedge|reversaldefattr|redlife|receivedhits|receiveddamage|ratiolevel|randomrange|random|rand|rad|projhittime|projhit|projguardedtime|projguarded|projcontacttime|projcontact|projcanceltime|prevstatetype|prevstateno|prevmovetype|prevanim|powermax|power|pos|playerno|playerindexexist|playeridexist|playercount|pi|physics|pausetime|parentdist|palno|palfxvar|p8name|p7name|p6name|p5name|p4name|p3name|p2statetype|p2stateno|p2name|p2movetype|p2life|p2dist|p2bodydist|p1name|offset|numtarget|numprojid|numproj|numplayer|numpartner|numhelper|numexplod|numenemy|name|mugenversion|movetype|movereversed|movehitvar|movehit|moveguarded|movecountered|movecontact|min|memberno|max|matchover|matchno|map|majorversion|losetime|loseko|lose|log|localscale|localcoord|ln|lifemax|life|lerp|leftedge|lastplayerid|jugglepoints|ishost|ishometeam|ishelper|isasserted|inputtime|inguarddist|indialogue|index|incustomstate|ifelse|id|hitvel|hitshakeover|hitpausetime|hitoverridden|hitover|hitfall|hitdefattr|hitcount|helpername|helperindexexist|helperid|guardpointsmax|guardpoints|guardcount|guardbreak|groundangle|getplayerid|gethitvar|gamewidth|gametime|gamemode|gameheight|gamefps|fvar|frontedgedist|frontedgebodydist|frontedge|framespercount|floor|float|firstattack|fighttime|fightscreenvar|facing|exp|envshakevar|e|drawpalno|drawgame|dizzypointsmax|dizzypoints|dizzy|displayname|deg|defence|ctrl|cos|const720p|const480p|const240p|const1080p|const|consecutivewins|cond|command|combocount|clamp|ceil|canrecover|camerazoom|camerapos|bottomedge|bgmposition|bgmlength|backedgedist|backedgebodydist|backedge|authorname|attack|atan2|atan|asin|animtime|animlength|animexist|animelemtime|animelemno|animelemlength|animelem|anim|angle|alpha|alive|airjumpcount|ailevelf|ailevel|acos|abs)\\b"
+                }
+            ]
+        },
+        "trigger-postfix":
+        {
+            "patterns":
+            [
+                {
+                    "name": "storage.type.zss",
+                    "match": "(?i)(?<=\\b(vel|rootdist|pos|parentdist|p2dist|p2bodydist|hitvel)\\b\\s*)(x|y|z)"
+                    
+                },
+                {
+                    "name": "storage.type.zss",
+                    "match": "(?i)(?<=\\b(screenpos|scale|offset|localcoord|camerapos)\\b\\s*)(x|y)"
+                },
+                {
+                    "name": "storage.type.zss",
+                    "match": "(?i)(?<=\\b(alpha)\\b\\s*)(source|dest)"
+                },
+                {
+                    "name": "storage.type.zss",
+                    "match": "(?i)(?<=\\b(teammode)\\b\\s*(=|!=)\\s*)(turns|tag|single|simul)"
+                },
+                {
+                    "name": "storage.type.zss",
+                    "match": "(?i)(?<=\\b(prevmovetype|p2movetype|movetype)\\b\\s*(=|!=)\\s*)(i|a|h)"
+                },
+                {
+                    "name": "storage.type.zss",
+                    "match": "(?i)(?<=\\b(statetype|prevstatetype|p2statetype)\\b\\s*(=|!=)\\s*)(s|c|a|l)"
+                },
+                {
+                    "name": "storage.type.zss",
+                    "match": "(?i)(?<=\\b(physics)\\b\\s*(=|!=)\\s*)(s|c|a|n)"
+                }
+            ]
+        }
+    },
+    "scopeName": "source.zss.ikemen"
+}
